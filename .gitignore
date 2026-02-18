@@ -1,0 +1,32 @@
+# Dependencies and build
+/_build/
+/deps/
+/cover/
+*.beam
+*.ez
+erl_crash.dump
+
+# Dialyzer
+/priv/plts/
+
+# Generated docs
+/doc/
+
+
+# Generated specs (reproducible via `make setup`)
+/specs/raw/
+/specs/openapi/
+/specs/diffs/
+/specs/metadata.json
+
+# IDE
+.elixir_ls/
+.vscode/
+
+# Local config
+CLAUDE.local.md
+*.local.md
+
+# OS
+.DS_Store
+Thumbs.db
