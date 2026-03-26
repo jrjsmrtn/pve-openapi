@@ -19,6 +19,9 @@ erl_crash.dump
 /specs/diffs/
 /specs/metadata.json
 
+# Generated architecture diagrams
+/architecture/diagrams/
+
 # IDE
 .elixir_ls/
 .vscode/

@@ -1,12 +1,12 @@
-# ADR-0002: pve-openapi as Single Source of Truth for PVE API Definitions
-
-## Status
-
-Accepted
+# 4. pve-openapi as Single Source of Truth for PVE API Definitions
 
 ## Date
 
 2026-02-18
+
+## Status
+
+Accepted
 
 ## Context
 
@@ -14,8 +14,6 @@ Multiple projects in the pvex-suite maintain hand-curated PVE API endpoint catal
 
 - `MockPveApi.Capabilities` — version-to-endpoint capability mapping
 - `MockPveApi.Coverage.*` — endpoint definitions with parameters
-- `PvexAsh.VersionCompatibility` — feature-to-minimum-version mapping
-- `PvexAsh.ApiCoverage.*` — endpoint definitions with Ash resource mappings
 
 These overlap, can drift from each other and from the actual PVE API, and don't carry parameter schemas or response types.
 

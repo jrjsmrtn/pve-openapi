@@ -88,8 +88,15 @@ pve-openapi/
       endpoint.ex         # Endpoint struct
       validator.ex        # Structural OpenAPI validation
     mix/tasks/            # 9 Mix tasks (fetch, normalize, convert, extract, validate, metadata, clean, fetch_host)
+  architecture/
+    workspace.dsl         # C4 model (Structurizr DSL)
+    shared/               # Shared DSL fragments
+    README.md             # Architecture-as-code documentation
   test/                   # Tests (45)
-  docs/adr/               # Architecture Decision Records
+  docs/
+    adr/                  # Architecture Decision Records
+    sprints/              # Sprint plans and retrospectives
+    roadmap/              # Roadmap and phase tracking
 ```
 
 ## Key Conventions
@@ -104,10 +111,18 @@ pve-openapi/
 
 ## Consumers
 
-- `pvex-ash-only` — version compatibility, contract testing
 - `mock-pve-api` — capability matrix, endpoint validation
 - `pvex_admin` — (indirect, via pvex)
 
+## Current Development Status
+
+- **Current Sprint**: Between sprints (v0.2.0 complete)
+- **Latest Release**: v0.2.0
+- **Next Sprint**: Sprint 1 (see `docs/sprints/sprint-0001-plan.md`)
+- **Next Milestone**: v0.2.1
+
 ## ADR Format
 
-Use `ADR-[number]: [title]` format for internal titles.
+Use adr-tools title format: `# N. [title]` where N is the integer ADR number. This is required for Structurizr `!adrs` integration. Cross-references use `ADR-N` (e.g., "as decided in ADR-4").
+
+Foundational ADRs (1-3) follow the project-orchestration-skills framework. Project-specific ADRs start at 4.

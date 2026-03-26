@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Georges Martin
 
-.PHONY: help setup extract convert metadata validate-specs validate diff clean
+.PHONY: help setup extract convert metadata validate-specs validate diff clean arch-validate arch-viz
 
 SPECS_DIR = specs/openapi
 RAW_DIR = specs/raw
@@ -50,6 +50,19 @@ test: ## Run tests
 diff: ## Generate version diffs (placeholder for Phase 3)
 	@echo "Version diff generation not yet implemented"
 	@echo "Use PveOpenapi.Diff module for programmatic diffs"
+
+arch-validate: ## Validate C4 architecture model
+	podman run --rm \
+		-v "$(CURDIR)/architecture:/usr/local/structurizr:z" \
+		-v "$(CURDIR)/docs:/usr/local/structurizr/docs:z,ro" \
+		structurizr/cli validate -w /usr/local/structurizr/workspace.dsl
+
+arch-viz: ## Start Structurizr Lite viewer (localhost:8080)
+	podman run --rm -d -p 8080:8080 \
+		-v "$(CURDIR)/architecture:/usr/local/structurizr:z" \
+		-v "$(CURDIR)/docs:/usr/local/structurizr/docs:z,ro" \
+		structurizr/lite
+	@echo "Structurizr Lite running at http://localhost:8080"
 
 clean: ## Clean all generated artifacts
 	mix pve_openapi.clean
