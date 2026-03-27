@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.4] - 2026-03-27
+
+### Added
+
+- `PveOpenapi.SchemaQuality` — response schema quality analysis (rich/partial/opaque classification)
+- `PveOpenapi.SchemaQuality.quality_diff/2` — compare schema quality between versions
+- `mix pve_openapi.quality` task — summary table, per-version detail, JSON output, opaque-only filter
+- `PveOpenapi.Spec.has_response_schema?/3` — quick check for non-trivial response schema
+- `PveOpenapi.Spec.response_properties/4` — extract property names/types from response
+
 ## [0.2.3] - 2026-03-27
 
 ### Added

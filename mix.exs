@@ -3,7 +3,7 @@
 defmodule PveOpenapi.MixProject do
   use Mix.Project
 
-  @version "0.2.3"
+  @version "0.2.4"
 
   def project do
     [
@@ -73,7 +73,7 @@ defmodule PveOpenapi.MixProject do
           PveOpenapi.FeatureMatrix,
           PveOpenapi.FeatureMatrix.Catalog
         ],
-        Validation: [PveOpenapi.Contract, PveOpenapi.Validator],
+        Validation: [PveOpenapi.Contract, PveOpenapi.Validator, PveOpenapi.SchemaQuality],
         Pipeline: [PveOpenapi.PveTypes, PveOpenapi.DebExtractor]
       ]
     ]

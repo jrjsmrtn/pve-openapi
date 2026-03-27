@@ -113,6 +113,44 @@ defmodule PveOpenapi.Spec do
     end
   end
 
+  @doc """
+  Check if an endpoint has a non-trivial response schema for status 200.
+  """
+  @spec has_response_schema?(map(), String.t(), atom()) :: boolean()
+  def has_response_schema?(spec, path, method) do
+    case response_schema(spec, path, method, 200) do
+      {:ok, schema} ->
+        data = schema["properties"]["data"] || %{}
+        data != %{} && data["type"] != "null"
+
+      :error ->
+        false
+    end
+  end
+
+  @doc """
+  Extract property names and types from a response schema.
+
+  Returns `{:ok, properties_map}` or `:error`.
+  """
+  @spec response_properties(map(), String.t(), atom(), integer()) :: {:ok, map()} | :error
+  def response_properties(spec, path, method, status_code) do
+    with {:ok, schema} <- response_schema(spec, path, method, status_code) do
+      data = schema["properties"]["data"] || schema
+      {:ok, extract_property_types(data)}
+    end
+  end
+
+  defp extract_property_types(%{"properties" => p}) when is_map(p) do
+    Map.new(p, fn {name, prop} -> {name, prop["type"]} end)
+  end
+
+  defp extract_property_types(%{"items" => %{"properties" => p}}) when is_map(p) do
+    Map.new(p, fn {name, prop} -> {name, prop["type"]} end)
+  end
+
+  defp extract_property_types(_), do: %{}
+
   # --- Internals ---
 
   defp extract_parameters(operation) do

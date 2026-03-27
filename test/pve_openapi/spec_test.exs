@@ -107,4 +107,26 @@ defmodule PveOpenapi.SpecTest do
       assert :error = Spec.required_parameters(spec, "/nonexistent", :get)
     end
   end
+
+  describe "has_response_schema?/3" do
+    test "returns true for /version GET", %{spec: spec} do
+      assert Spec.has_response_schema?(spec, "/version", :get)
+    end
+
+    test "returns false for nonexistent endpoint", %{spec: spec} do
+      refute Spec.has_response_schema?(spec, "/nonexistent", :get)
+    end
+  end
+
+  describe "response_properties/4" do
+    test "extracts property names and types for /version GET", %{spec: spec} do
+      assert {:ok, props} = Spec.response_properties(spec, "/version", :get, 200)
+      assert is_map(props)
+      assert map_size(props) > 0
+    end
+
+    test "returns :error for nonexistent endpoint", %{spec: spec} do
+      assert :error = Spec.response_properties(spec, "/nonexistent", :get, 200)
+    end
+  end
 end
