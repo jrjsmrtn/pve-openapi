@@ -117,9 +117,10 @@ pve-openapi/
 
 ## Current Development Status
 
-- **Current Sprint**: Sprint 2 (see `docs/sprints/sprint-0002-plan.md`)
-- **Sprint Goal**: Contract validation, CI, and release readiness
-- **Next Milestone**: v0.2.2
+- **Current Sprint**: Between sprints (Sprint 2 complete)
+- **Latest Release**: v0.2.2
+- **Next Sprint**: Sprint 3 (see `docs/sprints/sprint-0003-plan.md`)
+- **Next Milestone**: v0.2.3
 
 ## ADR Format
 

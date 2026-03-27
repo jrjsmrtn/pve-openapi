@@ -2,7 +2,7 @@
 
 **Target Version**: v0.2.2
 **Phase**: Enrichment
-**Status**: In Progress
+**Status**: Complete
 **Started**: 2026-03-27
 
 ## Goal
@@ -67,13 +67,13 @@ With Sprint 1 and this sprint adding significant API surface, CI and ExDoc impro
 
 ## Acceptance Criteria
 
-- [ ] `Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, %{"vmid" => "not_an_int"})` returns a type error
-- [ ] `Spec.parameters_for(spec, path, method)` returns structured parameter list
-- [ ] `Spec.response_schema(spec, path, method, 200)` returns the response schema map
-- [ ] Config `specs_path` is respected at compile time
-- [ ] Consumer integration (mock-pve-api Mix tasks) unaffected
-- [ ] `.forgejo/workflows/ci.yml` exists and is syntactically valid
-- [ ] `mix docs` generates documentation with CHANGELOG and module grouping
-- [ ] `make validate` passes
-- [ ] CHANGELOG.md updated
-- [ ] Version bumped to 0.2.2
+- [x] `Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, %{"vmid" => "not_an_int"})` returns a type error
+- [x] `Spec.parameters_for(spec, path, method)` returns structured parameter list
+- [x] `Spec.response_schema(spec, path, method, 200)` returns the response schema map
+- [x] Config `specs_path` is respected at compile time
+- [x] Consumer integration (mock-pve-api Mix tasks) unaffected
+- [x] `.forgejo/workflows/ci.yml` exists and is syntactically valid
+- [x] `mix docs` generates documentation with CHANGELOG and module grouping
+- [x] `make validate` passes (65 tests, 0 failures, dialyzer clean)
+- [x] CHANGELOG.md updated
+- [x] Version bumped to 0.2.2
