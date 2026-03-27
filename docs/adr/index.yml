@@ -23,11 +23,10 @@ project:
     file: 0004-pve-openapi-as-single-source-of-truth.md
     title: pve-openapi as Single Source of Truth for PVE API Definitions
     status: Accepted
-  # Future (Sprint 1):
-  # - id: 5
-  #   file: 0005-persisted-version-diffs.md
-  #   title: Persisted Version Diffs
-  #   status: Proposed
+  - id: 5
+    file: 0005-persisted-version-diffs.md
+    title: Persisted Version Diffs
+    status: Accepted
   # Future (Sprint 2):
   # - id: 6
   #   file: 0006-ci-pipeline-scope.md

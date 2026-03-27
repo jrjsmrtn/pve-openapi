@@ -33,9 +33,10 @@ The entire pipeline is native Elixir — no external tools (curl, ar, tar, Deno)
 4. **Convert** (`mix pve_openapi.convert`): Transforms PVE JSON schema tree into OpenAPI 3.1
 5. **Validate** (`mix pve_openapi.validate`): Structural validation of generated OpenAPI 3.1 specs
 6. **Metadata** (`mix pve_openapi.metadata`): Generates `specs/metadata.json` index
-7. **Extract** (`mix pve_openapi.extract`): Orchestrator — runs fetch + normalize + convert for all (or specified) versions
-8. **Clean** (`mix pve_openapi.clean`): Removes all generated spec artifacts
-9. **Fetch Host** (`mix pve_openapi.fetch_host`): Fetches API schema from a live PVE host via `:httpc`
+7. **Diff** (`mix pve_openapi.diff`): Generates version diff JSON files in `specs/diffs/`
+8. **Extract** (`mix pve_openapi.extract`): Orchestrator — runs fetch + normalize + convert for all (or specified) versions
+9. **Clean** (`mix pve_openapi.clean`): Removes all generated spec artifacts
+10. **Fetch Host** (`mix pve_openapi.fetch_host`): Fetches API schema from a live PVE host via `:httpc`
 
 ## Development Commands
 
@@ -87,7 +88,7 @@ pve-openapi/
       contract.ex         # Contract validation
       endpoint.ex         # Endpoint struct
       validator.ex        # Structural OpenAPI validation
-    mix/tasks/            # 9 Mix tasks (fetch, normalize, convert, extract, validate, metadata, clean, fetch_host)
+    mix/tasks/            # 10 Mix tasks (fetch, normalize, convert, extract, validate, metadata, clean, fetch_host)
   architecture/
     workspace.dsl         # C4 model (Structurizr DSL)
     shared/               # Shared DSL fragments
@@ -116,9 +117,8 @@ pve-openapi/
 
 ## Current Development Status
 
-- **Current Sprint**: Between sprints (v0.2.0 complete)
-- **Latest Release**: v0.2.0
-- **Next Sprint**: Sprint 1 (see `docs/sprints/sprint-0001-plan.md`)
+- **Current Sprint**: Sprint 1 (see `docs/sprints/sprint-0001-plan.md`)
+- **Sprint Goal**: Diff infrastructure and persisted version diffs
 - **Next Milestone**: v0.2.1
 
 ## ADR Format

@@ -10,7 +10,7 @@ help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-setup: deps extract metadata ## Compile, extract, convert, and generate metadata
+setup: deps extract metadata diff ## Compile, extract, convert, generate metadata and diffs
 	@echo ""
 	@echo "Setup complete. You can now run: mix compile"
 
@@ -47,9 +47,8 @@ validate: ## Full quality pipeline (format, compile, credo, dialyzer, test, spec
 test: ## Run tests
 	mix test
 
-diff: ## Generate version diffs (placeholder for Phase 3)
-	@echo "Version diff generation not yet implemented"
-	@echo "Use PveOpenapi.Diff module for programmatic diffs"
+diff: ## Generate version diffs for all consecutive pairs
+	mix pve_openapi.diff --all
 
 arch-validate: ## Validate C4 architecture model
 	podman run --rm \
