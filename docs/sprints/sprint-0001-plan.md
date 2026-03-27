@@ -2,7 +2,7 @@
 
 **Target Version**: v0.2.1
 **Phase**: Enrichment
-**Status**: In Progress
+**Status**: Complete
 **Started**: 2026-03-27
 
 ## Goal
@@ -57,10 +57,10 @@ The `Diff` module detects added/removed endpoints and new required params at run
 
 ## Acceptance Criteria
 
-- [ ] `mix pve_openapi.diff --all` produces one JSON file per consecutive version pair in `specs/diffs/`
-- [ ] `PveOpenapi.Diff.parameter_changes("8.3", "8.4")` returns structured parameter-level changes
-- [ ] `PveOpenapi.Diff.breaking_changes/2` reports removed parameters and type-breaking changes
-- [ ] All existing tests pass; new tests cover new functions
-- [ ] `make validate` passes
-- [ ] CHANGELOG.md exists with v0.2.0 and v0.2.1 entries
-- [ ] Version bumped to 0.2.1
+- [x] `mix pve_openapi.diff --all` produces one JSON file per consecutive version pair in `specs/diffs/`
+- [x] `PveOpenapi.Diff.parameter_changes("8.3", "8.4")` returns structured parameter-level changes
+- [x] `PveOpenapi.Diff.breaking_changes/2` reports removed parameters and type-breaking changes
+- [x] All existing tests pass; new tests cover new functions (54 tests, 0 failures)
+- [x] `make validate` passes (format, compile, credo strict, dialyzer, test, specs)
+- [x] CHANGELOG.md exists with v0.2.0 and v0.2.1 entries
+- [x] Version bumped to 0.2.1
