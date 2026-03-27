@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.2] - 2026-03-27
+
+### Added
+
+- `PveOpenapi.Spec.parameters_for/3` — structured parameter list (name, type, required, in, schema)
+- `PveOpenapi.Spec.response_schema/4` — response schema extraction by status code
+- `PveOpenapi.Spec.required_parameters/3` — shortcut for required parameter names
+- Forgejo CI pipeline (`.forgejo/workflows/ci.yml`) — compile, format, credo, test
+- ADR-0006: CI Pipeline Scope
+- ExDoc module grouping (Core, Version Compatibility, Validation, Pipeline)
+
+### Changed
+
+- `PveOpenapi.Contract.validate_request/4` now validates parameter types and constraints via `Validator.validate_value/2`, not just presence checking
+- `PveOpenapi.Contract` errors are now structured maps (`%{param: name, error: reason}`) instead of plain strings
+- `PveOpenapi` respects `specs_path` config via `Application.compile_env/3`
+- ExDoc extras now include CHANGELOG.md and all ADRs
+
 ## [0.2.1] - 2026-03-27
 
 ### Added

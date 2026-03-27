@@ -22,7 +22,12 @@ defmodule PveOpenapi do
 
   alias PveOpenapi.Spec
 
-  @specs_base Path.join([__DIR__, "..", "specs"]) |> Path.expand()
+  @specs_openapi_path Application.compile_env(
+                        :pve_openapi,
+                        :specs_path,
+                        Path.join([__DIR__, "..", "specs", "openapi"]) |> Path.expand()
+                      )
+  @specs_base Path.dirname(@specs_openapi_path)
   @metadata_path Path.join(@specs_base, "metadata.json")
 
   @external_resource @metadata_path
@@ -42,7 +47,7 @@ defmodule PveOpenapi do
 
   # Compile-time loading of all specs
   @specs (for %{"version" => version, "file" => file} <- @metadata["versions"], into: %{} do
-            spec_path = Path.join(@specs_base, Path.join("openapi", file))
+            spec_path = Path.join(@specs_openapi_path, file)
             @external_resource spec_path
             {version, spec_path |> File.read!() |> Jason.decode!()}
           end)

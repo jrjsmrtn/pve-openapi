@@ -33,22 +33,62 @@ defmodule PveOpenapi.ContractTest do
 
   describe "validate_request/4" do
     test "passes for valid request with required params" do
-      # /nodes/{node}/qemu GET only requires path param 'node' which is in the path
       assert :ok = Contract.validate_request("8.3", "/version", :get, %{})
     end
 
     test "fails for missing required parameters" do
-      # POST /nodes/{node}/qemu requires vmid
       result = Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, %{})
-      assert {:error, reasons} = result
-      assert is_list(reasons)
-      assert Enum.any?(reasons, &String.contains?(&1, "Missing required parameter"))
+      assert {:error, errors} = result
+      assert is_list(errors)
+      assert Enum.any?(errors, &(&1.param == "vmid" && &1.error =~ "Missing"))
     end
 
     test "fails for nonexistent endpoint" do
       result = Contract.validate_request("8.3", "/nonexistent", :get, %{})
       assert {:error, [reason]} = result
-      assert String.contains?(reason, "not found")
+      assert is_binary(reason)
+      assert reason =~ "not found"
+    end
+
+    test "passes with correct parameter types" do
+      assert :ok =
+               Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, %{
+                 "vmid" => 100,
+                 "node" => "pve1"
+               })
+    end
+
+    test "fails for wrong parameter type" do
+      result =
+        Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, %{
+          "vmid" => "not_an_int",
+          "node" => "pve1"
+        })
+
+      assert {:error, errors} = result
+      assert Enum.any?(errors, &(&1.param == "vmid" && &1.error =~ "type"))
+    end
+
+    test "fails for value below minimum" do
+      result =
+        Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, %{
+          "vmid" => 1,
+          "node" => "pve1"
+        })
+
+      assert {:error, errors} = result
+      assert Enum.any?(errors, &(&1.param == "vmid" && &1.error =~ "minimum"))
+    end
+
+    test "fails for value above maximum" do
+      result =
+        Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, %{
+          "vmid" => 9_999_999_999,
+          "node" => "pve1"
+        })
+
+      assert {:error, errors} = result
+      assert Enum.any?(errors, &(&1.param == "vmid" && &1.error =~ "maximum"))
     end
   end
 

@@ -55,4 +55,56 @@ defmodule PveOpenapi.SpecTest do
       assert :error = Spec.operation(spec, "/nonexistent", :get)
     end
   end
+
+  describe "parameters_for/3" do
+    test "returns structured parameter list", %{spec: spec} do
+      assert {:ok, params} = Spec.parameters_for(spec, "/nodes/{node}/qemu", :post)
+      assert is_list(params)
+      assert params != []
+
+      vmid = Enum.find(params, &(&1.name == "vmid"))
+      assert vmid != nil
+      assert vmid.type == "integer"
+      assert vmid.required == true
+      assert vmid.in == "body"
+      assert is_map(vmid.schema)
+    end
+
+    test "includes path parameters", %{spec: spec} do
+      assert {:ok, params} = Spec.parameters_for(spec, "/nodes/{node}/qemu", :post)
+
+      node = Enum.find(params, &(&1.name == "node"))
+      assert node != nil
+      assert node.in == "path"
+      assert node.required == true
+    end
+
+    test "returns :error for nonexistent path", %{spec: spec} do
+      assert :error = Spec.parameters_for(spec, "/nonexistent", :get)
+    end
+  end
+
+  describe "response_schema/4" do
+    test "returns response schema for 200", %{spec: spec} do
+      assert {:ok, schema} = Spec.response_schema(spec, "/version", :get, 200)
+      assert is_map(schema)
+    end
+
+    test "returns :error for nonexistent endpoint", %{spec: spec} do
+      assert :error = Spec.response_schema(spec, "/nonexistent", :get, 200)
+    end
+  end
+
+  describe "required_parameters/3" do
+    test "returns list of required parameter names", %{spec: spec} do
+      assert {:ok, required} = Spec.required_parameters(spec, "/nodes/{node}/qemu", :post)
+      assert is_list(required)
+      assert "vmid" in required
+      assert "node" in required
+    end
+
+    test "returns :error for nonexistent endpoint", %{spec: spec} do
+      assert :error = Spec.required_parameters(spec, "/nonexistent", :get)
+    end
+  end
 end

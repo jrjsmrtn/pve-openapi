@@ -12,14 +12,15 @@ defmodule PveOpenapi.Contract do
       # Validate that a set of implemented endpoints covers the spec
       PveOpenapi.Contract.validate_coverage("8.3", implemented_endpoints)
 
-      # Check if a request matches the spec
-      PveOpenapi.Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, params)
+      # Check if a request matches the spec (type-aware validation)
+      PveOpenapi.Contract.validate_request("8.3", "/nodes/{node}/qemu", :post, %{"vmid" => 100})
   """
 
-  alias PveOpenapi.{Spec, VersionMatrix}
+  alias PveOpenapi.{Spec, Validator, VersionMatrix}
 
   @type endpoint_ref :: {String.t(), atom()}
-  @type validation_result :: :ok | {:error, [String.t()]}
+  @type validation_error :: %{param: String.t(), error: String.t()}
+  @type validation_result :: :ok | {:error, [validation_error() | String.t()]}
 
   @doc """
   Validate that a set of implemented endpoints covers the spec for a version.
@@ -54,15 +55,19 @@ defmodule PveOpenapi.Contract do
   @doc """
   Validate request parameters against the spec.
 
-  Returns `:ok` or `{:error, reasons}`.
+  Checks both presence of required parameters and type/constraint validation
+  of all provided parameters against their OpenAPI schemas.
+
+  Returns `:ok` or `{:error, errors}` where errors are structured maps
+  with `:param` and `:error` keys.
   """
   @spec validate_request(String.t(), String.t(), atom(), map()) :: validation_result()
   def validate_request(version, path, method, params) when is_map(params) do
     spec = PveOpenapi.spec!(version)
 
-    case Spec.operation(spec, path, method) do
-      {:ok, operation} ->
-        validate_params(operation, params)
+    case Spec.parameters_for(spec, path, method) do
+      {:ok, spec_params} ->
+        do_validate_request(spec_params, params)
 
       :error ->
         {:error, ["Endpoint #{method} #{path} not found in PVE #{version} spec"]}
@@ -95,38 +100,38 @@ defmodule PveOpenapi.Contract do
     end
   end
 
-  # Validate required parameters are present
-  defp validate_params(operation, params) do
-    errors = []
-
-    # Check query/path parameters
-    required_params =
-      (operation["parameters"] || [])
-      |> Enum.filter(&(&1["required"] == true))
-      |> Enum.map(& &1["name"])
-
-    # Check request body required fields
-    body_required =
-      case operation["requestBody"] do
-        %{"content" => %{"application/json" => %{"schema" => %{"required" => req}}}}
-        when is_list(req) ->
-          req
-
-        _ ->
-          []
-      end
-
-    all_required = required_params ++ body_required
+  defp do_validate_request(spec_params, params) do
     param_keys = params |> Map.keys() |> Enum.map(&to_string/1) |> MapSet.new()
+    params_by_name = build_params_lookup(params)
 
-    missing =
-      all_required
-      |> Enum.reject(&MapSet.member?(param_keys, &1))
+    # Check for missing required parameters
+    missing_errors =
+      spec_params
+      |> Enum.filter(& &1.required)
+      |> Enum.reject(&MapSet.member?(param_keys, &1.name))
+      |> Enum.map(fn p ->
+        %{param: p.name, error: "Missing required parameter"}
+      end)
 
-    errors =
-      errors ++
-        Enum.map(missing, fn p -> "Missing required parameter: #{p}" end)
+    # Type/constraint validation for provided parameters
+    type_errors =
+      spec_params
+      |> Enum.filter(&MapSet.member?(param_keys, &1.name))
+      |> Enum.flat_map(fn spec_param ->
+        value = params_by_name[spec_param.name]
+
+        case Validator.validate_value(value, spec_param.schema) do
+          :ok -> []
+          {:error, reason} -> [%{param: spec_param.name, error: reason}]
+        end
+      end)
+
+    errors = missing_errors ++ type_errors
 
     if errors == [], do: :ok, else: {:error, errors}
+  end
+
+  defp build_params_lookup(params) do
+    for {k, v} <- params, into: %{}, do: {to_string(k), v}
   end
 end

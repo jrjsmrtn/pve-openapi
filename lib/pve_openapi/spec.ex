@@ -65,6 +65,103 @@ defmodule PveOpenapi.Spec do
 
   def operation(_, _, _), do: :error
 
+  @doc """
+  Return structured parameter information for an operation.
+
+  Each parameter includes `:name`, `:type`, `:required`, `:in` (path/query/body),
+  and `:schema` (the raw OpenAPI schema).
+  """
+  @spec parameters_for(map(), String.t(), atom()) :: {:ok, [map()]} | :error
+  def parameters_for(spec, path, method) do
+    case operation(spec, path, method) do
+      {:ok, op} -> {:ok, extract_parameters(op)}
+      :error -> :error
+    end
+  end
+
+  @doc """
+  Return the response schema for a given status code.
+  """
+  @spec response_schema(map(), String.t(), atom(), integer()) :: {:ok, map()} | :error
+  def response_schema(spec, path, method, status_code) do
+    with {:ok, op} <- operation(spec, path, method),
+         status_str = Integer.to_string(status_code),
+         {:ok, response} <- Map.fetch(op["responses"] || %{}, status_str) do
+      schema =
+        get_in(response, ["content", "application/json", "schema"]) ||
+          response["schema"] ||
+          %{}
+
+      {:ok, schema}
+    else
+      _ -> :error
+    end
+  end
+
+  @doc """
+  Return the list of required parameter names for an operation.
+  """
+  @spec required_parameters(map(), String.t(), atom()) :: {:ok, [String.t()]} | :error
+  def required_parameters(spec, path, method) do
+    case parameters_for(spec, path, method) do
+      {:ok, params} ->
+        required = params |> Enum.filter(& &1.required) |> Enum.map(& &1.name)
+        {:ok, required}
+
+      :error ->
+        :error
+    end
+  end
+
+  # --- Internals ---
+
+  defp extract_parameters(operation) do
+    query_path_params =
+      (operation["parameters"] || [])
+      |> Enum.map(fn p ->
+        %{
+          name: p["name"],
+          type: get_in(p, ["schema", "type"]),
+          required: p["required"] || false,
+          in: p["in"],
+          schema: p["schema"] || %{}
+        }
+      end)
+
+    body_params = extract_body_parameters(operation)
+
+    Enum.sort_by(query_path_params ++ body_params, & &1.name)
+  end
+
+  defp extract_body_parameters(operation) do
+    schema =
+      get_in(operation, ["requestBody", "content", "application/json", "schema"]) ||
+        get_in(operation, [
+          "requestBody",
+          "content",
+          "application/x-www-form-urlencoded",
+          "schema"
+        ])
+
+    case schema do
+      %{"properties" => props} when is_map(props) ->
+        required_set = MapSet.new(schema["required"] || [])
+
+        Enum.map(props, fn {name, prop_schema} ->
+          %{
+            name: name,
+            type: prop_schema["type"],
+            required: MapSet.member?(required_set, name),
+            in: "body",
+            schema: prop_schema
+          }
+        end)
+
+      _ ->
+        []
+    end
+  end
+
   defp method_order(:get), do: 0
   defp method_order(:post), do: 1
   defp method_order(:put), do: 2
