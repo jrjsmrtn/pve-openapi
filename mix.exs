@@ -3,7 +3,7 @@
 defmodule PveOpenapi.MixProject do
   use Mix.Project
 
-  @version "0.2.2"
+  @version "0.2.3"
 
   def project do
     [
@@ -62,11 +62,17 @@ defmodule PveOpenapi.MixProject do
         "docs/adr/0003-use-elixir-and-openapi-31.md",
         "docs/adr/0004-pve-openapi-as-single-source-of-truth.md",
         "docs/adr/0005-persisted-version-diffs.md",
-        "docs/adr/0006-ci-pipeline-scope.md"
+        "docs/adr/0006-ci-pipeline-scope.md",
+        "docs/adr/0007-feature-matrix-abstraction.md"
       ],
       groups_for_modules: [
         Core: [PveOpenapi, PveOpenapi.Spec, PveOpenapi.Endpoint],
-        "Version Compatibility": [PveOpenapi.VersionMatrix, PveOpenapi.Diff],
+        "Version Compatibility": [
+          PveOpenapi.VersionMatrix,
+          PveOpenapi.Diff,
+          PveOpenapi.FeatureMatrix,
+          PveOpenapi.FeatureMatrix.Catalog
+        ],
         Validation: [PveOpenapi.Contract, PveOpenapi.Validator],
         Pipeline: [PveOpenapi.PveTypes, PveOpenapi.DebExtractor]
       ]

@@ -96,6 +96,23 @@ defmodule PveOpenapi.Diff do
   end
 
   @doc """
+  Load a diff from persisted JSON if available, otherwise compute at runtime.
+
+  Looks for `specs/diffs/diff-{from}-{to}.json`. Falls back to `full_diff/2`.
+  """
+  @spec load_diff(String.t(), String.t()) :: map()
+  def load_diff(from_version, to_version) do
+    diffs_dir = Path.join([__DIR__, "..", "..", "specs", "diffs"]) |> Path.expand()
+    path = Path.join(diffs_dir, "diff-#{from_version}-#{to_version}.json")
+
+    if File.exists?(path) do
+      path |> File.read!() |> Jason.decode!()
+    else
+      full_diff(from_version, to_version)
+    end
+  end
+
+  @doc """
   Return a complete structured diff suitable for JSON serialization.
   """
   @spec full_diff(String.t(), String.t()) :: map()

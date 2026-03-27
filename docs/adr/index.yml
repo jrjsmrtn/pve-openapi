@@ -31,8 +31,7 @@ project:
     file: 0006-ci-pipeline-scope.md
     title: CI Pipeline Scope
     status: Accepted
-  # Future (Sprint 3):
-  # - id: 7
-  #   file: 0007-feature-matrix-abstraction.md
-  #   title: Feature Matrix Abstraction
-  #   status: Proposed
+  - id: 7
+    file: 0007-feature-matrix-abstraction.md
+    title: Feature Matrix Abstraction
+    status: Accepted

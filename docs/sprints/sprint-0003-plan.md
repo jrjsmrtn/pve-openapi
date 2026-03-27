@@ -2,8 +2,8 @@
 
 **Target Version**: v0.2.3
 **Phase**: Enrichment
-**Status**: Planned
-**Started**: -
+**Status**: In Progress
+**Started**: 2026-03-27
 
 ## Goal
 

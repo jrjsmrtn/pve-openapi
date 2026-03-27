@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.3] - 2026-03-27
+
+### Added
+
+- `PveOpenapi.FeatureMatrix` — high-level feature availability queries across PVE versions
+- `PveOpenapi.FeatureMatrix.Catalog` — default feature-to-path mapping catalog aligned with consumer atoms
+- `PveOpenapi.Diff.load_diff/2` — loads persisted diff JSON or falls back to runtime computation
+- ADR-0007: Feature Matrix Abstraction
+
 ## [0.2.2] - 2026-03-27
 
 ### Added
