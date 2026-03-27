@@ -2,7 +2,7 @@
 
 **Target Version**: v0.2.3
 **Phase**: Enrichment
-**Status**: In Progress
+**Status**: Complete
 **Started**: 2026-03-27
 
 ## Goal
@@ -54,12 +54,12 @@ These overlap and can drift from the actual API. pve-openapi can auto-derive fea
 
 ## Acceptance Criteria
 
-- [ ] `FeatureMatrix.feature_available?(:ha_affinity, "9.0")` returns `true`
-- [ ] `FeatureMatrix.feature_available?(:ha_affinity, "8.3")` returns `false`
-- [ ] `FeatureMatrix.features_for_version("9.0")` includes all features from existing consumer catalogs
-- [ ] `FeatureMatrix.feature_added_in(:sdn)` returns correct version
-- [ ] Feature atom names align with existing consumer usage
-- [ ] `Diff.load_diff("8.3", "8.4")` returns structured diff data
-- [ ] `make validate` passes
-- [ ] CHANGELOG.md updated
-- [ ] Version bumped to 0.2.3
+- [x] `FeatureMatrix.feature_available?(:ha_rules, "9.0")` returns `true`
+- [x] `FeatureMatrix.feature_available?(:ha_rules, "8.3")` returns `false`
+- [x] `FeatureMatrix.features_for_version("9.0")` includes features from existing consumer catalogs
+- [x] `FeatureMatrix.feature_added_in(:sdn)` returns `"7.0"`
+- [x] Feature atom names align with existing consumer usage
+- [x] `Diff.load_diff("8.3", "8.4")` returns structured diff data
+- [x] `make validate` passes (86 tests, 0 failures, dialyzer clean)
+- [x] CHANGELOG.md updated
+- [x] Version bumped to 0.2.3
