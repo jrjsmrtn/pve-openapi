@@ -2,7 +2,7 @@
 
 **Target Version**: v0.2.4
 **Phase**: Enrichment
-**Status**: In Progress
+**Status**: Complete
 **Started**: 2026-03-27
 
 ## Goal
@@ -48,10 +48,10 @@ PVE's `returns` definitions are often sparse — many endpoints return `{"type":
 
 ## Acceptance Criteria
 
-- [ ] `SchemaQuality.analyze_endpoint(spec, "/version", :get)` returns `{:rich, ...}`
-- [ ] `SchemaQuality.quality_summary("9.0")` returns stats with counts
-- [ ] `mix pve_openapi.quality --version 9.0` prints a summary table
-- [ ] Endpoints with `type: "null"` or `type: "any"` returns classified as opaque
-- [ ] `make validate` passes
-- [ ] CHANGELOG.md updated
-- [ ] Version bumped to 0.2.4
+- [x] `SchemaQuality.analyze_endpoint(spec, "/version", :get)` returns `{:rich, ...}`
+- [x] `SchemaQuality.quality_summary("9.0")` returns stats with counts
+- [x] `mix pve_openapi.quality --version 9.0` prints a summary table
+- [x] Endpoints with `type: "null"` or `type: "any"` returns classified as opaque
+- [x] `make validate` passes (100 tests, 0 failures, dialyzer clean)
+- [x] CHANGELOG.md updated
+- [x] Version bumped to 0.2.4

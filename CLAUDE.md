@@ -118,9 +118,9 @@ pve-openapi/
 
 ## Current Development Status
 
-- **Current Sprint**: Sprint 4 (see `docs/sprints/sprint-0004-plan.md`)
-- **Sprint Goal**: Response schema quality analysis
-- **Next Milestone**: v0.2.4
+- **Current Sprint**: Between sprints (all planned sprints complete)
+- **Latest Release**: v0.2.4
+- **Next Milestone**: Consumer migration or Hex.pm publication
 
 ## ADR Format
 
